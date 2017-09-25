@@ -1,10 +1,13 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
+
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+
 class RegisterController extends Controller
 {
     /*
@@ -17,13 +20,16 @@ class RegisterController extends Controller
     | provide this functionality without requiring any additional code.
     |
     */
+
     use RegistersUsers;
+
     /**
      * Where to redirect users after registration.
      *
      * @var string
      */
     protected $redirectTo = '/home';
+
     /**
      * Create a new controller instance.
      *
@@ -33,6 +39,7 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
     }
+
     /**
      * The user has been registered.
      *
@@ -42,9 +49,9 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, $user)
     {
-        $user->generateToken();
         return response()->json(['data' => $user->toArray()], 201);
     }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -59,6 +66,7 @@ class RegisterController extends Controller
             'password' => 'required|min:6|confirmed',
         ]);
     }
+
     /**
      * Create a new user instance after a valid registration.
      *
@@ -71,6 +79,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'api_token' => str_random(60)
         ]);
     }
 }

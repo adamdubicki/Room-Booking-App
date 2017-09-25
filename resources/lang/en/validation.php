@@ -100,8 +100,8 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'room_id' => [
+            'exists' => 'Room does not exist.',
         ],
     ],
 
