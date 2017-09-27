@@ -16,6 +16,7 @@ class AddStartTimeAndEndTimeToMeetings extends Migration
       Schema::table('meetings', function(Blueprint $table){
           $table->dateTime('start_time')->nullable();
           $table->dateTime('end_time')->nullable();
+          $table->softDeletes();
       });
     }
 

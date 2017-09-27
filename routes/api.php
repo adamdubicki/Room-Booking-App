@@ -18,12 +18,22 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Authentication Endpoints
 Route::post('login', 'Auth\LoginController@login');
 Route::post('register', 'Auth\RegisterController@register');
 
 Route::group(['middleware' => 'auth:api'], function(){
-    Route::get('meetings', 'MeetingController@index');
-    Route::post('meetings', 'MeetingController@store');
 
+    // Meeting Endpoints
+    Route::get('meetings', 'MeetingController@index');
+    Route::post('meetings','MeetingController@store');
+    Route::get('meetings/{meeting_id}', "MeetingController@show");
+    Route::delete('meetings/{meeting_id}', "MeetingController@delete");
+
+    // Room Endpoints
     Route::get('rooms', 'RoomController@index');
+    Route::get('rooms/{room_id}', 'RoomController@show');
+    Route::get('rooms/{room_id}/meetings','RoomController@getMeetings');
+
+    // Invitation Endpoints
 });
