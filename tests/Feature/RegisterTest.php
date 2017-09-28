@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use App\User;
 use Tests\TestCase;
@@ -20,7 +20,7 @@ class RegisterTest extends TestCase
                     'email'=>['The email field is required.'],
                     'password'=>['The password field is required.'],
                 ],
-            ]);
+              ]);
     }
 
     public function testRequiresPasswordConfirmation()
