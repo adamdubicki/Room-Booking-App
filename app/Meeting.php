@@ -9,6 +9,8 @@ class Meeting extends Model
 {
     use SoftDeletes;
 
+    public static $MAX_MEETING_DURATION_HOURS = 3;
+
     protected $dates = ['deleted_at'];
 
     protected $fillable = [

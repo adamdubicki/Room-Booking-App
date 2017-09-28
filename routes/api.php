@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('meetings','MeetingController@store');
     Route::get('meetings/{meeting_id}', "MeetingController@show");
     Route::delete('meetings/{meeting_id}', "MeetingController@delete");
+    Route::patch('meetings/{meeting_id}', "MeetingController@update");
 
     // Room Endpoints
     Route::get('rooms', 'RoomController@index');
