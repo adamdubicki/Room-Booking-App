@@ -9,22 +9,48 @@ use DB;
 
 class RoomController extends Controller
 {
+  /*
+  |--------------------------------------------------------------------------
+  | Room Controller
+  |--------------------------------------------------------------------------
+  |
+  | This controller handles displaying rooms, and meetings by room.
+  |
+  */
+
     public function index()
     {
         $rooms = Room::all();
         return response()->json($rooms);
     }
 
+    /**
+     * Show a room by $room_id
+     *
+     * @param  unsigned int $room_id
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function show($room_id)
     {
         $room = Room::find($room_id);
-        if(is_null($room)){
+        if(is_null($room)) {
             return response()->json(["message"=>"Room does not exist."], 404);
         } else {
             return response()->json($room);
         }
     }
 
+    /**
+     * Get all the meetings for a room.
+     * @param? dateTime before
+     * @param? dateTime after
+     *
+     * @param  Illuminate\Http\Request $request
+     * @param  unsigned int $room_id
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function getMeetings(Request $request, $room_id)
     {
         $this->validate($request, [
