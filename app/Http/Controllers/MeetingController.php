@@ -69,11 +69,11 @@ class MeetingController extends Controller
             return response()->json(["message"=>"Forbidden: You do not have permission to edit this meeting."],403);
         } else {
             $new_meeting_attributes = array(
-              'name' => request()->has('name') ? $request->get('name'): $meeting->name,
-              'description' => request()->has('description') ? $request->get('description'): $meeting->description,
-              'room_id' => request()->has('room_id') ? $request->get('room_id'): $meeting->room_id,
-              'start_time' => request()->has('start_time') ? $request->get('start_time'): $meeting->start_time,
-              'end_time' => request()->has('end_time') ? $request->get('end_time'): $meeting->end_time,
+              'name' => $request->has('name') ? $request->get('name'): $meeting->name,
+              'description' => $request->has('description') ? $request->get('description'): $meeting->description,
+              'room_id' => $request->has('room_id') ? $request->get('room_id'): $meeting->room_id,
+              'start_time' => $request->has('start_time') ? $request->get('start_time'): $meeting->start_time,
+              'end_time' => $request->has('end_time') ? $request->get('end_time'): $meeting->end_time,
             );
             $validator = $this->validator($new_meeting_attributes);
             if(count($validator->errors()) > 0){

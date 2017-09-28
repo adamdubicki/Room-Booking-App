@@ -2,122 +2,83 @@
 
 namespace Tests\Unit;
 
+use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Log;
 
 class RegisterTest extends TestCase
 {
-    /**
-     * Test for invalid registration submissions
-     *
-     * @return void
-     */
-    public function testInvalidRegistrations()
+
+    public function testRequiredFieldsOnRegister()
     {
-      /**
-       * name field is required
-       */
-      $response = $this->json('POST','/api/register',[
-          'name' => '',
-          'email' => 'test@test.com',
-          'password' => 'test123',
-          'password_confirmation' => 'test123',
-      ]);
-
-      $response->assertJson([
-          'message'=>'The given data was invalid.',
-          'errors'=>['name'=>['The name field is required.']]
-      ])->assertStatus(422);
-
-      /**
-       * email field is required
-       */
-      $response = $this->json('POST','/api/register',[
-          'name' => 'testy',
-          'email' => '',
-          'password' => 'test123',
-          'password_confirmation' => 'test123',
-      ]);
-
-      $response->assertJson([
-          'message'=>'The given data was invalid.',
-          'errors'=>['email'=>['The email field is required.']]
-      ])->assertStatus(422);
-
-      /**
-       * password field is required
-       */
-      $response = $this->json('POST','/api/register',[
-          'name' => 'testy',
-          'email' => 'test@test123.com',
-          'password' => '',
-          'password_confirmation' => 'test123',
-      ]);
-
-      $response->assertJson([
-          'message'=>'The given data was invalid.',
-          'errors'=>['password'=>['The password field is required.']]
-      ])->assertStatus(422);
-
-
-      /**
-       * password confirmation field is required
-       */
-      $response = $this->json('POST','/api/register',[
-          'name' => 'testy',
-          'email' => 'test@test123.com',
-          'password' => 'test123',
-          'password_confirmation' => '',
-      ]);
-
-      $response->assertJson([
-          'message'=>'The given data was invalid.',
-          'errors'=>['password'=>['The password confirmation does not match.']]
-      ])->assertStatus(422);
-
-      /**
-       * email field must be a valid email
-       */
-      $response = $this->json('POST','/api/register',[
-          'name' => 'testy',
-          'email' => 'test',
-          'password' => 'test123',
-          'password_confirmation' => 'test123',
-      ]);
-
-
-      $response->assertJson([
-          'message'=>'The given data was invalid.',
-          'errors'=>['email'=>['The email must be a valid email address.']]
-      ])->assertStatus(422);
+        $this->json('POST','/api/register')
+            ->assertStatus(422)
+            ->assertJson([
+                'errors'=> [
+                    'name' =>['The name field is required.'],
+                    'email'=>['The email field is required.'],
+                    'password'=>['The password field is required.'],
+                ],
+            ]);
     }
 
-
-    /**
-     * Test that valid registrations go through
-     *
-     * @return void
-     */
-    public function testValidRegistrations()
+    public function testRequiresPasswordConfirmation()
     {
-      /**
-       * create a valid user
-       */
-      $response = $this->json('POST','/api/register',[
-          'name' => 'testy',
-          'email' => 'test@test123.com',
-          'password' => 'test123',
-          'password_confirmation' => 'test123',
-      ]);
+        $payload = [
+            'name' => 'testy',
+            'email' => 'test@test123.com',
+            'password' => 'test123',
+        ];
+        $this->json('POST','/api/register',$payload)
+            ->assertStatus(422)
+            ->assertJson([
+                'errors'=> [
+                    'password'=>['The password confirmation does not match.'],
+                ],
+            ]);
+    }
 
-      $response->assertJson([
-          'data'=>[
-            'name'=>"testy",
-            'email'=>'test@test123.com'
-          ]
-      ])->assertStatus(201);
+    public function testRegistersSuccessfully()
+    {
+        $payload = [
+            'name' => 'testy',
+            'email' => 'test@test123.com',
+            'password' => 'test123',
+            'password_confirmation' => 'test123',
+        ];
+        $this->json('POST','/api/register',$payload)
+            ->assertStatus(201)
+            ->assertJsonStructure([
+                'data'=> [
+                    'id',
+                    'name',
+                    'email',
+                    'created_at',
+                    'updated_at',
+                    'api_token'
+                ],
+            ]);
+    }
 
+    public function testUniqueRegistations()
+    {
+        $user = factory(User::class)->create();
+        $payload = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => 'test123',
+            'password_confirmation' => 'test123',
+        ];
+        $this->json('POST','/api/register',$payload)
+            ->assertStatus(422)
+            ->assertJson([
+              "errors" => [
+                 "email" => [
+                     "The email has already been taken."
+                 ]
+              ]
+        ]);
     }
 
 }
