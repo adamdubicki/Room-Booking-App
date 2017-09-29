@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Meeting;
 use Illuminate\Http\Request;
 use App\Room;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,11 @@ class RoomController extends Controller
   |
   */
 
+  /**
+   * Show all of the rooms.
+   *
+   * @return \Illuminate\Http\Response
+   */
     public function index()
     {
         $rooms = Room::all();
@@ -41,6 +47,22 @@ class RoomController extends Controller
         }
     }
 
+
+
+    // $meetings = Meeting::where('user_id', $user_id);
+    //
+    // if($request->has('before'))
+    // {
+    //     $meetings->where('end_time', '<', $request->get('before'));
+    // }
+    //
+    // if($request->has('after'))
+    // {
+    //     $meetings->where('start_time', '>', $request->get('after'));
+    // }
+    //
+    // return response()->json($meetings->get());
+
     /**
      * Get all the meetings for a room.
      * @param? dateTime before
@@ -51,20 +73,27 @@ class RoomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getMeetings(Request $request, $room_id)
+    public function getMeetings($room_id)
     {
-        $this->validate($request, [
+        $this->validate(request(), [
             'before'=>'date_format:Y-m-d H:i',
             'after'=>'date_format:Y-m-d H:i',
         ]);
-        $before = request()->has('before') ? request()->get('before') : Date("Y-m-d H:i'");
-        $after = request()->has('after') ? request()->get('after') : '2010-01-01 00:00';
+        $room = Room::find($room_id)->get();
+        if(is_null($room)){
+            return response()->json(["message"=>"Room does not exist."], 404);
+        }
+        $meetings = Meeting::where('room_id', $room_id);
+        if($request->has('before'))
+        {
+            $meetings->where('end_time', '<', $request->get('before'));
+        }
 
-        $meetings = DB::select(DB::raw(
-            "SELECT *
-            FROM meetings
-            WHERE room_id = :room_id AND start_time < :before AND start_time > :after"
-        ), array('room_id'=>$room_id, 'after'=>$after,'before'=>$before));
-        return response()->json($meetings);
+        if($request->has('after'))
+        {
+            $meetings->where('start_time', '>', $request->get('after'));
+        }
+
+        return response()->json($meetings->get());
     }
 }

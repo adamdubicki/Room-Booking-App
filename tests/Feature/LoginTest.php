@@ -9,6 +9,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class LoginTest extends TestCase
 {
 
+  /**
+   * Fields are required on login.
+   *
+   * @return void
+   */
     public function testRequiresEmailAndPassword()
     {
           $this->json('POST','/api/login')
@@ -21,6 +26,11 @@ class LoginTest extends TestCase
               ]);
     }
 
+    /**
+     * Users can login successfully.
+     *
+     * @return void
+     */
     public function testUserLogsInSuccessfully()
     {
           $user = factory(User::class)->create([

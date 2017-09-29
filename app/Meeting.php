@@ -47,7 +47,7 @@ class Meeting extends Model
     }
 
     /**
-     * Return a map array for self validation on update..
+     * Return a map array for self validation on update.
      *
      * @return array
      */
@@ -105,6 +105,7 @@ class Meeting extends Model
 
     /**
      * Get the duration of a meeting in meetings.
+     *
      * @return float
      */
     public function getMeetingDurationMins()
@@ -114,6 +115,11 @@ class Meeting extends Model
         return round( ($end - $start) / 60, 2);
     }
 
+    /**
+     * Get the conflicting meetings (time slot and room).
+     *
+     * @return array
+     */
     public function getConflictingMeetings()
     {
         $ignore = is_null($this->id) ? -1 : $this->id;

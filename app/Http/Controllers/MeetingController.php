@@ -39,16 +39,21 @@ class MeetingController extends Controller
             'before'=>'date_format:Y-m-d H:i',
             'after'=>'date_format:Y-m-d H:i',
         ]);
-        $user_id = request()->has('user_id') ? request()->get('user_id'): Auth::user()->id;
-        $before = request()->has('before') ? request()->get('before') : Date("Y-m-d H:i");
-        $after = request()->has('after') ? request()->get('after') : '2010-01-01 00:00';
 
-        $meetings = DB::select(DB::raw(
-            "SELECT *
-            FROM meetings
-            WHERE user_id = :user_id AND start_time < :before AND start_time > :after"
-        ), array('user_id'=>$user_id, 'after'=>$after,'before'=>$before));
-        return response()->json($meetings);
+        $user_id = request()->has('user_id') ? request()->get('user_id'): Auth::user()->id;
+        $meetings = Meeting::where('user_id', $user_id);
+
+        if($request->has('before'))
+        {
+            $meetings->where('end_time', '<', $request->get('before'));
+        }
+
+        if($request->has('after'))
+        {
+            $meetings->where('start_time', '>', $request->get('after'));
+        }
+
+        return response()->json($meetings->get());
     }
 
     /**
@@ -80,7 +85,7 @@ class MeetingController extends Controller
             $meeting->end_time = $request->has('end_time') ? $request->get('end_time'): $meeting->end_time;
             if($meeting->validate($meeting->toArray()))
             {
-                return response()->json($meeting);
+                return response()->json($meeting, 200);
             }
             else
             {
@@ -119,7 +124,7 @@ class MeetingController extends Controller
      */
     public function delete($meeting_id){
 
-        $meeting = Meeting::find($id);
+        $meeting = Meeting::find($meeting_id);
 
         if(is_null($meeting))
         {
@@ -132,7 +137,7 @@ class MeetingController extends Controller
         else
         {
             $meeting->delete();
-            return 204;
+            return response()->json([],204);
         }
     }
 
@@ -161,7 +166,7 @@ class MeetingController extends Controller
         }
         else
         {
-            return response()->json($meeting->errors());
+            return response()->json($meeting->errors(), 400);
         }
     }
 }

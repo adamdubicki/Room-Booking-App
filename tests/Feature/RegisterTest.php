@@ -10,6 +10,11 @@ use Log;
 class RegisterTest extends TestCase
 {
 
+  /**
+   * Fields are required on registration.
+   *
+   * @return void
+   */
     public function testRequiredFieldsOnRegister()
     {
         $this->json('POST','/api/register')
@@ -23,6 +28,11 @@ class RegisterTest extends TestCase
               ]);
     }
 
+    /**
+     * Password and password_confirmation must match.
+     *
+     * @return void
+     */
     public function testRequiresPasswordConfirmation()
     {
         $payload = [
@@ -39,6 +49,11 @@ class RegisterTest extends TestCase
             ]);
     }
 
+    /**
+     * User can register successfully.
+     *
+     * @return void
+     */
     public function testRegistersSuccessfully()
     {
         $payload = [
@@ -61,6 +76,11 @@ class RegisterTest extends TestCase
             ]);
     }
 
+    /**
+     * Emails must be unique.
+     *
+     * @return void
+     */
     public function testUniqueRegistations()
     {
         $user = factory(User::class)->create();
