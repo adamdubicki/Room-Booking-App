@@ -27,7 +27,7 @@ class RoomController extends Controller
     public function index()
     {
         $rooms = Room::all();
-        return response()->json($rooms);
+        return response()->json(array("rooms"=>$rooms));
     }
 
     /**
@@ -43,7 +43,7 @@ class RoomController extends Controller
         if(is_null($room)) {
             return response()->json(["message"=>"Room does not exist."], 404);
         } else {
-            return response()->json($room);
+            return response()->json(array("room"=>$room));
         }
     }
 
@@ -63,7 +63,7 @@ class RoomController extends Controller
             'before'=>'date_format:Y-m-d H:i',
             'after'=>'date_format:Y-m-d H:i',
         ]);
-        $room = Room::find($room_id)->get();
+        $room = Room::where('id', $room_id)->get();
         if(is_null($room)){
             return response()->json(["message"=>"Room does not exist."], 404);
         }
@@ -78,6 +78,6 @@ class RoomController extends Controller
             $meetings->where('start_time', '>', request()->get('after'));
         }
 
-        return response()->json($meetings->get());
+        return response()->json(array("room"=>$room[0],"meetings"=>$meetings->get()));
     }
 }

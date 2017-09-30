@@ -132,7 +132,7 @@ class MeetingController extends Controller
         }
         elseif ($meeting->user_id != Auth::user()->id)
         {
-            return response()->json(["message"=>"Forbidden: You do not have permission to delete this meeting. "],403);
+            return response()->json(["message"=>"Forbidden: You do not have permission to delete this meeting."],403);
         }
         else
         {
