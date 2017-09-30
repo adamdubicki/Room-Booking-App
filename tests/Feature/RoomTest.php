@@ -85,5 +85,38 @@ class RoomTest extends TestCase
                     "end_time" => $date4,
                 ],
             ])->assertStatus(200);
+
+        $this->json('GET',"/api/rooms/1/meetings?before=$date3", [], $headers)
+            ->assertJson([
+                [
+                    "room_id" => 1,
+                    "name" => "test name 1",
+                    "description" => "test description 1",
+                    "start_time" => $date1,
+                    "end_time" => $date2,
+                ],
+            ])->assertStatus(200);
+
+        $this->json('GET',"/api/rooms/1/meetings?after=$date2", [], $headers)
+            ->assertJson([
+                [
+                    "room_id" => 1,
+                    "name" => "test name 2",
+                    "description" => "test description 2",
+                    "start_time" => $date3,
+                    "end_time" => $date4,
+                ],
+            ])->assertStatus(200);
+
+        $this->json('GET',"/api/rooms/2/meetings?after=$date2", [], $headers)
+            ->assertJson([
+                [
+                    "room_id" => 2,
+                    "name" => "test name 3",
+                    "description" => "test description 3",
+                    "start_time" => $date3,
+                    "end_time" => $date4,
+                ],
+            ])->assertStatus(200);
     }
 }

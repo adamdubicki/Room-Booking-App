@@ -47,22 +47,6 @@ class RoomController extends Controller
         }
     }
 
-
-
-    // $meetings = Meeting::where('user_id', $user_id);
-    //
-    // if($request->has('before'))
-    // {
-    //     $meetings->where('end_time', '<', $request->get('before'));
-    // }
-    //
-    // if($request->has('after'))
-    // {
-    //     $meetings->where('start_time', '>', $request->get('after'));
-    // }
-    //
-    // return response()->json($meetings->get());
-
     /**
      * Get all the meetings for a room.
      * @param? dateTime before
@@ -84,14 +68,14 @@ class RoomController extends Controller
             return response()->json(["message"=>"Room does not exist."], 404);
         }
         $meetings = Meeting::where('room_id', $room_id);
-        if($request->has('before'))
+        if(request()->has('before'))
         {
-            $meetings->where('end_time', '<', $request->get('before'));
+            $meetings->where('end_time', '<', request()->get('before'));
         }
 
-        if($request->has('after'))
+        if(request()->has('after'))
         {
-            $meetings->where('start_time', '>', $request->get('after'));
+            $meetings->where('start_time', '>', request()->get('after'));
         }
 
         return response()->json($meetings->get());
