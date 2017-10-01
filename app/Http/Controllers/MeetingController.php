@@ -53,7 +53,7 @@ class MeetingController extends Controller
             $meetings->where('start_time', '>', $request->get('after'));
         }
 
-        return response()->json($meetings->get());
+        return response()->json(array("meetings"=>$meetings->get()));
     }
 
     /**
@@ -85,7 +85,7 @@ class MeetingController extends Controller
             $meeting->end_time = $request->has('end_time') ? $request->get('end_time'): $meeting->end_time;
             if($meeting->validate($meeting->toArray()))
             {
-                return response()->json($meeting, 200);
+                return response()->json(array("meeting"=>$meeting), 200);
             }
             else
             {
@@ -110,7 +110,7 @@ class MeetingController extends Controller
         }
         else
         {
-            return response()->json($meeting);
+            return response()->json(array("meeting"=>$meeting));
         }
     }
 
@@ -162,7 +162,7 @@ class MeetingController extends Controller
               'start_time' => $request->input('start_time'),
               'end_time' => $request->input('end_time'),
             ]);
-            return response()->json($meeting);
+            return response()->json(array("meeting"=>$meeting));
         }
         else
         {

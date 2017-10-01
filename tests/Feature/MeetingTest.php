@@ -58,72 +58,89 @@ class MeetingTest extends TestCase
         $headers = ['Authorization' => "Bearer $user1->api_token"];
         $this->json('GET','/api/meetings', [], $headers)
             ->assertJson([
+              "meetings"=> [
                 [
                     "room_id" => 1,
                     "name" => "test name 1",
-                    "description" => "test description 1",
-                    "start_time" => $date1,
-                    "end_time" => $date2,
+                    "description"=> "test description 1",
+                    "start_time" => "$date1",
+                    "end_time" => "$date2",
+                    "id" => 1
                 ],
                 [
                     "room_id" => 1,
                     "name" => "test name 2",
-                    "description" => "test description 2",
-                    "start_time" => $date3,
-                    "end_time" => $date4,
+                    "description"=> "test description 2",
+                    "start_time"=> "$date3",
+                    "end_time"=> "$date4",
+                    "id"=> 2
                 ],
+              ]
             ])->assertStatus(200);
 
         $headers = ['Authorization' => "Bearer $user1->api_token"];
         $this->json('GET',"/api/meetings?user_id=$user1->id", [], $headers)
             ->assertJson([
+              "meetings"=> [
                 [
                     "room_id" => 1,
                     "name" => "test name 1",
-                    "description" => "test description 1",
-                    "start_time" => $date1,
-                    "end_time" => $date2,
+                    "description"=> "test description 1",
+                    "start_time" => "$date1",
+                    "end_time" => "$date2",
+                    "id" => 1
                 ],
                 [
                     "room_id" => 1,
                     "name" => "test name 2",
-                    "description" => "test description 2",
-                    "start_time" => $date3,
-                    "end_time" => $date4,
+                    "description"=> "test description 2",
+                    "start_time"=> "$date3",
+                    "end_time"=> "$date4",
+                    "id"=> 2
                 ],
+              ]
             ])->assertStatus(200);
 
         $this->json('GET',"/api/meetings?user_id=$user2->id", [], $headers)
             ->assertJson([
+              "meetings"=> [
                 [
                     "room_id" => 2,
                     "name" => "test name 3",
-                    "description" => "test description 3",
-                    "start_time" => $date1,
-                    "end_time" => $date2,
+                    "description"=> "test description 3",
+                    "start_time" => "$date1",
+                    "end_time" => "$date2",
+                    "id" => 3
                 ],
+              ]
             ])->assertStatus(200);
 
         $this->json('GET',"/api/meetings?user_id=$user1->id&before=$date3", [], $headers)
             ->assertJson([
-              [
-                  "room_id" => 1,
-                  "name" => "test name 1",
-                  "description" => "test description 1",
-                  "start_time" => $date1,
-                  "end_time" => $date2,
-              ],
+              "meetings"=> [
+                [
+                    "room_id" => 1,
+                    "name" => "test name 1",
+                    "description"=> "test description 1",
+                    "start_time" => "$date1",
+                    "end_time" => "$date2",
+                    "id" => 1
+                ],
+              ]
             ])->assertStatus(200);
 
         $this->json('GET',"/api/meetings?user_id=$user1->id&after=$date2", [], $headers)
             ->assertJson([
-              [
-                  "room_id" => 1,
-                  "name" => "test name 2",
-                  "description" => "test description 2",
-                  "start_time" => $date3,
-                  "end_time" => $date4,
-              ],
+              "meetings"=> [
+                [
+                    "room_id" => 1,
+                    "name" => "test name 2",
+                    "description"=> "test description 2",
+                    "start_time"=> "$date3",
+                    "end_time"=> "$date4",
+                    "id"=> 2
+                ],
+              ]
             ])->assertStatus(200);
     }
 
@@ -150,12 +167,15 @@ class MeetingTest extends TestCase
         $this->json('POST', '/api/meetings', $payload, $headers)
             ->assertStatus(200)
             ->assertJson([
-                "room_id" => 1,
-                "name" => "test name 1",
-                "description" => "test description 1",
-                "start_time" => $date1,
-                "end_time" => $date2,
-            ]);
+              "meeting"=> [
+                    "room_id" => 1,
+                    "name" => "test name 1",
+                    "description"=> "test description 1",
+                    "start_time" => "$date1",
+                    "end_time" => "$date2",
+                    "id" => 1
+                    ]
+              ]);
     }
 
 
@@ -441,11 +461,14 @@ class MeetingTest extends TestCase
         $this->json('PATCH', "/api/meetings/$meeting1->id", $payload, $headers)
             ->assertStatus(200)
             ->assertJson([
-                "room_id" => 2,
-                "name" => "new name",
-                "description" => "new description",
-                "start_time" => $date1,
-                "end_time" => $date3,
+              "meeting"=> [
+                    "room_id" => 2,
+                    "name" => "new name",
+                    "description"=> "new description",
+                    "start_time" => "$date1",
+                    "end_time" => "$date3",
+                    "id" => 1
+              ]
             ]);
     }
 
