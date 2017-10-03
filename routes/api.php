@@ -38,4 +38,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('rooms/{room_id}/meetings','RoomController@getMeetings');
 
     // Invitation Endpoints
+    Route::get('meetings/{meeting_id}/invitations',"InvitationController@index");
+    Route::post('meetings/{meeting_id}/invitations',"InvitationController@store");
+    Route::delete('meetings/{meeting_id}/invitations/{user_id}',"InvitationController@delete");
+    Route::get('/invitations',"InvitationController@show");
+    Route::patch('/invitations/{invitation_id}', "InvitationController@update");
 });

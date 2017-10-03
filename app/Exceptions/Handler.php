@@ -50,13 +50,16 @@ class Handler extends ExceptionHandler
             switch($exception->getStatusCode())
             {
               case '403':
-                return response()->json(['error'=>'Not authorized'],403);
+                return response()->json(['error'=>'Not authorized.'],403);
                 break;
               case '404':
-                return response()->json(['error'=>'Resource not found'],404);
+                return response()->json(['error'=>'Resource not found.'],404);
+                break;
+              case '405':
+                return response()->json(['error'=>'Method not allowed.'],405);
                 break;
               case '500':
-                return response()->json(['error'=>'Internal server error'],500);
+                return response()->json(['error'=>'Internal server error.'],500);
                 break;
               default:
                   return $this->renderHttpException($exception);

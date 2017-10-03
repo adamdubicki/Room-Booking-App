@@ -4,9 +4,11 @@ namespace App;
 
 use DateTime;
 use DB;
+use App\Events\MeetingDeleted;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
+use App\Observers\MeetingObserver;
 
 class Meeting extends Model
 {
@@ -18,6 +20,12 @@ class Meeting extends Model
     protected $dates = ['deleted_at'];
 
     private $errors;
+
+    public static function boot()
+    {
+        parent::boot();
+        Meeting::observe(new MeetingObserver());
+    }
 
     protected $fillable = [
         'name', 'description', 'user_id', 'room_id', 'start_time', 'end_time'

@@ -59,7 +59,6 @@ class MeetingController extends Controller
     /**
      * Update a meeting instance with new parameters.
      *
-     *
      * @param  Illuminate\Http\Request $request
      * @param  unsigned int $meeting_id
      *
@@ -128,7 +127,7 @@ class MeetingController extends Controller
 
         if(is_null($meeting))
         {
-            return response()->json(["message"=>"Meeting does not exist"],404);
+            return response()->json(["message"=>"Meeting does not exist."],404);
         }
         elseif ($meeting->user_id != Auth::user()->id)
         {
