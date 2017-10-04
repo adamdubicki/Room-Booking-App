@@ -80,9 +80,6 @@ class RoomTest extends TestCase
         $headers = ['Authorization' => "Bearer $user1->api_token"];
         $this->json('GET','/api/rooms/1/meetings', [], $headers)
             ->assertJson([
-                "room"=> [
-                    "id"=>  1,
-                ],
                 "meetings"=> [
                   [
                       "room_id" => 1,
@@ -105,9 +102,6 @@ class RoomTest extends TestCase
 
         $this->json('GET',"/api/rooms/1/meetings?before=$date3", [], $headers)
             ->assertJson([
-              "room"=> [
-                  "id"=>  1,
-              ],
               "meetings"=> [
                 [
                     "room_id" => 1,
@@ -122,9 +116,6 @@ class RoomTest extends TestCase
 
         $this->json('GET',"/api/rooms/1/meetings?after=$date2", [], $headers)
             ->assertJson([
-              "room"=> [
-                  "id"=>  1,
-              ],
               "meetings"=> [
                 [
                     "room_id" => 1,
@@ -139,9 +130,6 @@ class RoomTest extends TestCase
 
         $this->json('GET',"/api/rooms/2/meetings", [], $headers)
             ->assertJson([
-              "room"=> [
-                  "id"=>  2,
-              ],
               "meetings"=> [
                 [
                     "room_id" => 2,

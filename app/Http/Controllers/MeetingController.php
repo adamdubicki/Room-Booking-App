@@ -161,7 +161,7 @@ class MeetingController extends Controller
               'start_time' => $request->input('start_time'),
               'end_time' => $request->input('end_time'),
             ]);
-            return response()->json(array("meeting"=>$meeting));
+            return response()->json(array("meeting"=>$meeting), 201);
         }
         else
         {

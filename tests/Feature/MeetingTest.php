@@ -165,7 +165,7 @@ class MeetingTest extends TestCase
         ];
 
         $this->json('POST', '/api/meetings', $payload, $headers)
-            ->assertStatus(200)
+            ->assertStatus(201)
             ->assertJson([
               "meeting"=> [
                     "room_id" => 1,

@@ -82,7 +82,7 @@
                     Meeting Application
                 </div>
                 <div class="title m-b-md">
-                    API Docs here:
+                    <a href="http://docs.adamdubicki.apiary.io"> API Docs </a>
                 </div>
             </div>
         </div>

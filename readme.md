@@ -3,7 +3,7 @@
 A simple API for creating meetings.
 
 ## API docs
-This API can be tested here:.
+[API Documentation can be found here.]("http://docs.adamdubicki.apiary.io")
 
 ## Running locally.
 

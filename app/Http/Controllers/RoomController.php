@@ -78,6 +78,6 @@ class RoomController extends Controller
             $meetings->where('start_time', '>', request()->get('after'));
         }
 
-        return response()->json(array("room"=>$room[0],"meetings"=>$meetings->get()));
+        return response()->json(array("meetings"=>$meetings->get()));
     }
 }
