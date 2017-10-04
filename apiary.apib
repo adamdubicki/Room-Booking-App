@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
+HOST: Meeting-env-1.skvkuamh23.us-west-2.elasticbeanstalk.com/
 
 # Meeting Application
 
@@ -151,7 +151,7 @@ he meeting duration (from start_time to end_time) must be atleast 15 minutes and
 
     + Headers
 
-            Location: /questions/2
+            Authorization: Bearer 12345123455
 
     + Body
     
@@ -165,7 +165,7 @@ he meeting duration (from start_time to end_time) must be atleast 15 minutes and
                 }
             }
             
-## Meetings by User [/api/meetings{?before,after,user_id}]
+### Meetings by User [/api/meetings{?before,after,user_id}]
 Meetings can also be searched by room, filtered by a date range.
 + Parameters
     + user_id - A path variable for which user the meetings belong to. Default is the bearers meetings.
@@ -203,47 +203,165 @@ Meetings can also be searched by room, filtered by a date range.
                     }
                 ]
             }
-            
-            
-## SAMPLE [/asdasdas]
-### Create a New Question [POST]
 
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
+## Individual Meeting Actions [/api/meetings/{meeting_id}]
+### Get a Meeting by id [GET]
+
++ Request (application/json)
+        
+    + Headers
+
+            Authorization: Bearer 12345123455
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "meeting":{
+                    "name": "Meeting Name",
+                    "description":"Weekly Meeting",
+                    "start_time":"2018-12-24 12:00",
+                    "end_time":"2018-12-24 13:00",
+                    "room_id": 1
+                }
+            }
+            
+### Update a Meeting [PATCH]
+All fields are optional. The meeting will be updated to reflect changed fields.
+A meeting cannot changed in a way that would make it invalid (conflicts with other meetings, duration constraints).
 
 + Request (application/json)
 
         {
-            "name": "Meeting Name",
-            "description":"Weekly Meeting",
-            "start_time":"2018"
+            "name": "New Name",
+            "description":"New Description",
+            "start_time":"2018-12-24 13:00",
+            "end_time":"2018-12-24 14:00",
+            "room_id": 2
+        }
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "meeting":{
+                    "name": "New Name",
+                    "description":"New Description",
+                    "start_time":"2018-12-24 13:00",
+                    "end_time":"2018-12-24 14:00",
+                    "room_id": 2
+                }
+            }
+            
+### Delete a Meeting [DELETE]
+Soft deleting a meeting will cause it to not conflict with other meetings. Any user who is invited to this meeting instance will have their invitation status set to cancelled.
+
++ Request (application/json)
+
+
++ Response 204 (application/json)
+
+## Invitations [/api/meetings/{meeting_id}/invitations]
+### Create an Invitation [POST]
+
+Users can be invited to meetings through invitations. All invitations are set to 
+
++ Request (application/json)
+
+        {
+            "user_id": 1,
         }
 
 + Response 201 (application/json)
 
-    + Headers
+    + Body
 
-            Location: /questions/2
+            {
+                "invitation": {
+                    "user_id": 1,
+                    "meeting_id": 1,
+                    "status": "pending"
+                }
+            }
+### Get Invitations for Meeting  [GET]
+
+Users can be invited to meetings through invitations.
+
++ Request (application/json)
+
+
++ Response 200 (application/json)
 
     + Body
 
             {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
+                "invitations": {
                     {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
+                    "user_id": 1,
+                    "meeting_id": 1,
+                    "status": "accepted"
+                    },
+                    {
+                    "user_id": 2,
+                    "meeting_id": 1,
+                    "status": "rejected"
+                    },
+                }
+            }
+
+## Uninvite User [/api/meetings/{meeting_id}/invitations/{user_id}]
+### Remove User Invitation [DELETE]
+
++ Request (application/json)
+
+
++ Response 204 (application/json)
+
+
+
+## Get Invitations by Status [/api/invitations{?status}]
++ Parameters
+    + status (optional) - A filter to only return invitations of certain status. The four types of invitation status are "accepted","rejected","cancelled","pending".
+    
+### Get my Invitations [GET]
+
+Users can list all the invitations that they are invited to.
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "invitation": {
+                    "user_id": 1,
+                    "meeting_id": 1,
+                    "status": "pending"
+                }
+            }
+
+## Update Invitation [/api/invitations/{invitation_id}]
+### Accept/Reject Invitation [PATCH]
+
+Users can change the status of an invitation to 'accepted' or rejected'.
+
++ Request (application/json)
+
+        {
+            "status":"accepted"
+        }
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "invitation": {
+                    "user_id": 1,
+                    "meeting_id": 1,
+                    "status": "accepted"
+                }
             }
