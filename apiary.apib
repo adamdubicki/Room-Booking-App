@@ -1,0 +1,249 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+# Meeting Application
+
+A simple API to create meetings created using laravel.
+
+## Registration [/api/register]
+
+Users can register using this post action. 
+An API token is returned which is needed for authentication in other requests.
+### Register [POST]
++ Request (application/json)
+
+        {
+            "name" : "John Doe",
+            "password" : "testpassword",
+            "email" : "john@sample.com",
+            "password_confirmation" : "testpassword"
+        }
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "data":{
+                    "name": "John",
+                    "email": "john@sample.com",
+                    "api_token": "1234512345123451234512345",
+                    "created_at" "Y-m-d H:m:s",
+                    "updated_at" "Y-m-d H:m:s",
+                    "id": 2
+                }
+            }
+            
+            
+## Login [/api/login]
+
+Users can login using their password an email to retrieve their api token.
+### Login [POST]
++ Request (application/json)
+
+        {
+            "email" : "john@sample.com",
+            "password_confirmation" : "testpassword"
+        }
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "data":{
+                    "name": "John",
+                    "email": "john@sample.com",
+                    "api_token": "1234512345123451234512345",
+                    "created_at" "Y-m-d H:m:s",
+                    "updated_at" "Y-m-d H:m:s",
+                    "id": 2
+                }
+            }
+            
+            
+## Rooms [/api/rooms]
+
+There exist 3 rooms in the database.
+### List Rooms [GET]
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer 12345123455
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "rooms":[
+                    {
+                        "id": 1,
+                        "name":"Board Room"
+                    },
+                    {
+                        "id": 2,
+                        "name":"Break Room"
+                    },
+                    {
+                        "id": 3,
+                        "name":"Meeting Room"
+                    }
+                ]
+            }
+
+## Meetings by Room [/api/rooms/{room_id}/meetings{?before,after}]
+Meetings can also be searched by room, filtered by a date range.
++ Parameters
+    + room_id - A path variable for which room will be queried.
+    + before (optional) - A date string (Y-m-d H:i) for which all meeting end_dates will be before.
+    + after (optional) -  A date string (Y-m-d H:i) for which all meeting start_dates will be after.
+### Get Meetings by room [GET]
+
++ Request (application/json)
+        
+    + Headers
+
+            Authorization: Bearer 12345123455
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "meetings":[
+                    {
+                        "room_id":2,
+                        "name":"meeting 1",
+                        "description":"test description",
+                        "start_time":"2077-10-12 12:10",
+                        "end_time": "2077-10-12 12:30",
+                        "id":1
+                    },
+                    {
+                        "room_id":2,
+                        "name":"meeting 2",
+                        "description":"test description",
+                        "start_time":"2077-10-12 12:35",
+                        "end_time": "2077-10-12 12:50",
+                        "id":2
+                    }
+                ]
+            }
+
+## Meetings [/api/meetings]
+You can create meetings in a room. There are several constraints. Meetings cannot overlap in a particular room. T
+he meeting duration (from start_time to end_time) must be atleast 15 minutes and less than 3 hours. You cannot create meetings before the current time.
+### Create a New Meeting [POST]
+
++ Request (application/json)
+
+        {
+            "name": "Meeting Name",
+            "description":"Weekly Meeting",
+            "start_time":"2018-12-24 12:00",
+            "end_time":"2018-12-24 13:00",
+            "room_id": 1
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /questions/2
+
+    + Body
+    
+            {
+                "meeting":{
+                    "name": "Meeting Name",
+                    "description":"Weekly Meeting",
+                    "start_time":"2018-12-24 12:00",
+                    "end_time":"2018-12-24 13:00",
+                    "room_id": 1
+                }
+            }
+            
+## Meetings by User [/api/meetings{?before,after,user_id}]
+Meetings can also be searched by room, filtered by a date range.
++ Parameters
+    + user_id - A path variable for which user the meetings belong to. Default is the bearers meetings.
+    + before (optional) - A date string (Y-m-d H:i) for which all meeting end_dates will be before.
+    + after (optional) -  A date string (Y-m-d H:i) for which all meeting start_dates will be after.
+### Get Meetings by room [GET]
+
++ Request (application/json)
+        
+    + Headers
+
+            Authorization: Bearer 12345123455
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "meetings":[
+                    {
+                        "room_id":2,
+                        "name":"meeting 1",
+                        "description":"test description",
+                        "start_time":"2077-10-12 12:10",
+                        "end_time": "2077-10-12 12:30",
+                        "id":1
+                    },
+                    {
+                        "room_id":2,
+                        "name":"meeting 2",
+                        "description":"test description",
+                        "start_time":"2077-10-12 12:35",
+                        "end_time": "2077-10-12 12:50",
+                        "id":2
+                    }
+                ]
+            }
+            
+            
+## SAMPLE [/asdasdas]
+### Create a New Question [POST]
+
+You may create your own question using this action. It takes a JSON
+object containing a question and a collection of answers in the
+form of choices.
+
++ Request (application/json)
+
+        {
+            "name": "Meeting Name",
+            "description":"Weekly Meeting",
+            "start_time":"2018"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /questions/2
+
+    + Body
+
+            {
+                "question": "Favourite programming language?",
+                "published_at": "2015-08-05T08:40:51.620Z",
+                "choices": [
+                    {
+                        "choice": "Swift",
+                        "votes": 0
+                    }, {
+                        "choice": "Python",
+                        "votes": 0
+                    }, {
+                        "choice": "Objective-C",
+                        "votes": 0
+                    }, {
+                        "choice": "Ruby",
+                        "votes": 0
+                    }
+                ]
+            }
