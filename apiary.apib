@@ -283,6 +283,9 @@ Users can be invited to meetings through invitations. All invitations are set to
                     "user_id": 1,
                     "meeting_id": 1,
                     "status": "pending"
+                    "updated_at": "2017-10-05 00:08:30",
+                    "created_at": "2017-10-05 00:08:30",
+                    "id": 1
                 }
             }
 ### Get Invitations for Meeting  [GET]
@@ -301,13 +304,19 @@ Users can be invited to meetings through invitations.
                     {
                     "user_id": 1,
                     "meeting_id": 1,
-                    "status": "accepted"
+                    "status": "pending"
+                    "updated_at": "2017-10-05 00:08:30",
+                    "created_at": "2017-10-05 00:08:30",
+                    "id": 1
                     },
-                    {
+                    }
                     "user_id": 2,
                     "meeting_id": 1,
-                    "status": "rejected"
-                    },
+                    "status": "pending"
+                    "updated_at": "2017-10-05 00:08:30",
+                    "created_at": "2017-10-05 00:08:30",
+                    "id": 2
+                    } 
                 }
             }
 
@@ -334,12 +343,15 @@ Users can list all the invitations that they are invited to.
 + Response 200 (application/json)
 
     + Body
-
+            
             {
                 "invitation": {
                     "user_id": 1,
                     "meeting_id": 1,
                     "status": "pending"
+                    "updated_at": "2017-10-05 00:08:30",
+                    "created_at": "2017-10-05 00:08:30",
+                    "id": 1
                 }
             }
 
@@ -362,6 +374,9 @@ Users can change the status of an invitation to 'accepted' or rejected'.
                 "invitation": {
                     "user_id": 1,
                     "meeting_id": 1,
-                    "status": "accepted"
+                    "status": "acceptedate"
+                    "updated_at": "2017-10-05 00:08:30",
+                    "created_at": "2017-10-05 00:08:30",
+                    "id": 1
                 }
             }
