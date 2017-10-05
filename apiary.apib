@@ -135,6 +135,7 @@ Meetings can also be searched by room, filtered by a date range.
 ## Meetings [/api/meetings]
 You can create meetings in a room. There are several constraints. Meetings cannot overlap in a particular room. T
 he meeting duration (from start_time to end_time) must be atleast 15 minutes and less than 3 hours. You cannot create meetings before the current time.
+By default all time strings are in UTC.
 ### Create a New Meeting [POST]
 
 + Request (application/json)
