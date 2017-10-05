@@ -3,7 +3,7 @@ HOST: Meeting-env-1.skvkuamh23.us-west-2.elasticbeanstalk.com/
 
 # Meeting Application
 
-A simple API to create meetings created using laravel.
+A simple API to create meetings. Postman collection available here: https://www.getpostman.com/collections/c18c4d79d8f02a74fac0. Use 'import' and then 'paste raw' to get a full copy of requests in postman.
 
 ## Registration [/api/register]
 
@@ -135,6 +135,7 @@ Meetings can also be searched by room, filtered by a date range.
 ## Meetings [/api/meetings]
 You can create meetings in a room. There are several constraints. Meetings cannot overlap in a particular room. T
 he meeting duration (from start_time to end_time) must be atleast 15 minutes and less than 3 hours. You cannot create meetings before the current time.
+By default all time strings are in UTC.
 ### Create a New Meeting [POST]
 
 + Request (application/json)
@@ -283,6 +284,9 @@ Users can be invited to meetings through invitations. All invitations are set to
                     "user_id": 1,
                     "meeting_id": 1,
                     "status": "pending"
+                    "updated_at": "2017-10-05 00:08:30",
+                    "created_at": "2017-10-05 00:08:30",
+                    "id": 1
                 }
             }
 ### Get Invitations for Meeting  [GET]
@@ -301,13 +305,19 @@ Users can be invited to meetings through invitations.
                     {
                     "user_id": 1,
                     "meeting_id": 1,
-                    "status": "accepted"
+                    "status": "pending"
+                    "updated_at": "2017-10-05 00:08:30",
+                    "created_at": "2017-10-05 00:08:30",
+                    "id": 1
                     },
-                    {
+                    }
                     "user_id": 2,
                     "meeting_id": 1,
-                    "status": "rejected"
-                    },
+                    "status": "pending"
+                    "updated_at": "2017-10-05 00:08:30",
+                    "created_at": "2017-10-05 00:08:30",
+                    "id": 2
+                    } 
                 }
             }
 
@@ -334,12 +344,15 @@ Users can list all the invitations that they are invited to.
 + Response 200 (application/json)
 
     + Body
-
+            
             {
                 "invitation": {
                     "user_id": 1,
                     "meeting_id": 1,
                     "status": "pending"
+                    "updated_at": "2017-10-05 00:08:30",
+                    "created_at": "2017-10-05 00:08:30",
+                    "id": 1
                 }
             }
 
@@ -362,6 +375,9 @@ Users can change the status of an invitation to 'accepted' or rejected'.
                 "invitation": {
                     "user_id": 1,
                     "meeting_id": 1,
-                    "status": "accepted"
+                    "status": "acceptedate"
+                    "updated_at": "2017-10-05 00:08:30",
+                    "created_at": "2017-10-05 00:08:30",
+                    "id": 1
                 }
             }
